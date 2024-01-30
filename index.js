@@ -64,12 +64,12 @@ async function run() {
         res.send(result);
     });
 
-    app.get('/bookings/:id' , async(req,res) => {
-        const id = req.params.id;
-        const query = {_id : new ObjectId(id)}
-        const result = await bookingCollection.findOne(query);
-        res.send(result);
-    });
+    // app.get('/bookings/:id' , async(req,res) => {
+    //     const id = req.params.id;
+    //     const query = {_id : new ObjectId(id)}
+    //     const result = await bookingCollection.findOne(query);
+    //     res.send(result);
+    // });
 
 
     app.post('/bookings' , async(req , res) => {
@@ -79,12 +79,25 @@ async function run() {
         console.log(result)
     });
 
+    app.patch('/bookings/:id' , async(req , res) => {
+        const id = req.params.id;
+        const updatedBooking = req.body;
+        const filter = {_id : new ObjectId(id)};
+        const updateDoc = {
+            $set : {
+                status : updatedBooking.status
+            },
+        };
+        const result = await bookingCollection.updateOne(filter , updateDoc);
+        res.send(result);
+    });
+
     app.delete('/bookings/:id' , async(req , res) => {
         const id = req.params.id;
         const query = {_id : new ObjectId(id)};
         const result = await bookingCollection.deleteOne(query);
-        res.send(result);
         console.log(result)
+        res.send(result);
     });
 
     // Send a ping to confirm a successful connection
